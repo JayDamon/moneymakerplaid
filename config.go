@@ -13,7 +13,7 @@ var environments = map[string]plaid.Environment{
 	"production":  plaid.Production,
 }
 
-type Config struct {
+type Configuration struct {
 	Client       *plaid.APIClient
 	Config       *plaid.Configuration
 	Products     string
@@ -21,7 +21,7 @@ type Config struct {
 	RedirectUrl  string
 }
 
-func NewConfiguration() *Config {
+func NewConfiguration() *Configuration {
 
 	plaidClientId := getOrExit("PLAID_CLIENT_ID")
 	plaidSecret := getOrExit("PLAID_SECRET")
@@ -38,7 +38,7 @@ func NewConfiguration() *Config {
 
 	client := plaid.NewAPIClient(config)
 
-	return &Config{
+	return &Configuration{
 		Client:       client,
 		Config:       config,
 		Products:     plaidProducts,
