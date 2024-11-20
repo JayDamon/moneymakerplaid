@@ -1,7 +1,6 @@
 package moneymakerplaid
 
 import (
-	"context"
 	"fmt"
 	"github.com/plaid/plaid-go/plaid"
 	"log"
@@ -15,7 +14,6 @@ var environments = map[string]plaid.Environment{
 }
 
 type Configuration struct {
-	Client       *plaid.APIClient
 	Config       *plaid.Configuration
 	Products     string
 	CountryCodes string
@@ -45,40 +43,12 @@ func NewConfiguration() *Configuration {
 	config.UseEnvironment(environments[plaidEnv])
 	// config.Debug = true
 
-	client := plaid.NewAPIClient(config)
-
 	return &Configuration{
-		Client:       client,
 		Config:       config,
 		Products:     plaidProducts,
 		CountryCodes: plaidCountryCodes,
 		RedirectUrl:  plaidRedirectUri,
 	}
-}
-
-func (config *Configuration) NewPlaidHandler() Handler {
-	return &PlaidHandler{
-		Configuration: config,
-	}
-}
-
-func (handler *PlaidHandler) GetAccountsForItem(privateToken string) (*plaid.AccountsGetResponse, error) {
-
-	plaidClient := handler.Configuration.Client
-
-	accountsGetRequest := *plaid.NewAccountsGetRequest(privateToken)
-
-	ctx := context.Background()
-	accountsGetResponse, _, err := plaidClient.PlaidApi.AccountsGet(ctx).AccountsGetRequest(
-		accountsGetRequest,
-	).Execute()
-	if err != nil {
-		log.Printf("Unable to get account details \n%+v\n", err)
-		return nil, err
-	}
-	log.Printf("Retrieved Auth Response \n%+v\n", accountsGetResponse)
-
-	return &accountsGetResponse, nil
 }
 
 func getOrExit(envVar string) string {
