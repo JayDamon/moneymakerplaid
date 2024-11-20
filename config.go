@@ -24,10 +24,6 @@ type PlaidHandler struct {
 	Configuration *Configuration
 }
 
-type Handler interface {
-	GetAccountsForItem(privateToken string) (*plaid.AccountsGetResponse, error)
-}
-
 func NewConfiguration() *Configuration {
 
 	plaidClientId := getOrExit("PLAID_CLIENT_ID")
